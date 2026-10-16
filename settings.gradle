@@ -1,19 +1,16 @@
 pluginManagement {
     repositories {
+        // ── 官方源优先（KSP / Kotlin plugin marker 只在官方源）──
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+
+        // ── 阿里云镜像作为后备（国内加速）──
         maven { setUrl("https://jitpack.io") }
         maven { setUrl("https://maven.aliyun.com/nexus/content/groups/public/") }
         maven { setUrl("https://maven.aliyun.com/nexus/content/repositories/jcenter") }
         maven { setUrl("https://maven.aliyun.com/nexus/content/repositories/google") }
         maven { setUrl("https://maven.aliyun.com/nexus/content/repositories/gradle-plugin") }
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
-        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
