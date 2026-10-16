@@ -6,20 +6,22 @@ plugins {
     id 'com.google.devtools.ksp'
 }
 
+def keystorePropsFile = rootProject.file("keystore.properties")
+def keystoreProps = new Properties()
+if (keystorePropsFile.exists()) {
+    keystoreProps.load(new FileInputStream(keystorePropsFile))
+}
+
 android {
     // 签名配置，直接写死
     signingConfigs {
-        debug {
-            storeFile file('D:\\jdy2002\\appkey\\jdy.jks')
-            storePassword 'jdy200255'
-            keyAlias 'jdy2002'
-            keyPassword 'jdy200255'
-        }
         release {
-            storeFile file('D:\\jdy2002\\appkey\\jdy.jks')
-            storePassword 'jdy200255'
-            keyAlias 'jdy2002'
-            keyPassword 'jdy200255'
+            if (keystorePropsFile.exists()) {
+                storeFile file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+            }
         }
     }
     namespace 'com.lanzou.cloud'
@@ -33,14 +35,15 @@ android {
         versionName "1.9.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.debug
     }
 
     buildTypes {
         release {
-            // 不开启混淆
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (keystorePropsFile.exists()) {
+                signingConfig signingConfigs.release
+            }
         }
     }
     compileOptions {
